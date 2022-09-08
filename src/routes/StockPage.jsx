@@ -9,56 +9,63 @@ const StockPage = () => {
   const [stock, setStock] = useState({})
   const params = useParams()
 
-  //${params.coinId}
+  //${params.stockId}
 
-  const url = `https://api.polygon.io/v2/aggs/ticker/${params.stockId}/prev?adjusted=true&apiKey=vixQjL6qlMgy72k0XrFAtGp62c_4681S`;
+  const url = `https://yh-finance.p.rapidapi.com/market/v2/get-quotes`;
+  
 
   useEffect(() => {
-    axios.get(url).then((response) => {
-      setStock(response.data)
-      console.log(response.data)
+    axios.get(url, {
+      params: {region: 'US', symbols: params.stockId},
+      headers: {
+        'X-RapidAPI-Key': 'c78b23ab3emsh9417fe91a36eebap10fb38jsn072f5de820f4',
+        'X-RapidAPI-Host': 'yh-finance.p.rapidapi.com'
+      }
+    }).then((response) => {
+      setStock(response.data.quoteResponse.result[0])
+      // console.log(response.data.quoteResponse.result[0])
     })
   }, [url])
   
   return (
     <div className='rounded-div my-12 py-8'>
+      <h1 className="text-4xl">{stock?.shortName}</h1>
       <div className='flex py-8'>
-        {/* <img className='w-20 h-20 mr-8' src={stock.image?.large} alt="/" /> */}
         <div>
-          <p className='text-3xl font-bold'>{stock?.ticker} price</p>
-          {/* <p>({stock.ticker?.toUpperCase()} / CAD)</p> */}
+          <p className='text-3xl font-bold'>{stock?.symbol} Price</p>
+          <p>({stock.symbol?.toUpperCase()}/ USD)</p>
         </div>
       </div>
 
         <div className='grid md:grid-cols-2 gap-8'>
           <div>
             <div className='flex justify-between'>
-              {stock.results[0].c ? (<p className='text-3xl font-bold'>${stock.results[0].c.toLocaleString()}</p>) : null}
-              <p>7 Day</p>
+              {stock.regularMarketPrice ? (<p className='text-3xl font-bold'>${stock.regularMarketPrice}</p>) : null}
+              <p>Regular Market Change</p>
             </div>
-            <div>
-              {/* <Sparklines data={stock.market_data?.sparkline_7d.price}>
+            {/* <div>
+              <Sparklines data={stock.market_data?.sparkline_7d.price}>
                 <SparklinesLine color="teal" />
-              </Sparklines> */}
-            </div>
+              </Sparklines>
+            </div> */}
             <div className='flex justify-between py-4'>
               <div>
                 <p className='text-gray-500 text-sm'>Market Cap</p>
-                {stock.price?.price ? (<p>${stock.price.cad.toLocaleString()}</p>) : null}
+                {stock.marketCap ? (<p>${stock.marketCap.toLocaleString()}</p>) : null}
               </div>
               <div>
-                <p className='text-gray-500 text-sm'>Volume (24h)</p>
-                {stock.results[0].v ? (<p>{stock.results[0].v}</p>) : null}
+                <p className='text-gray-500 text-sm'>Forward PE</p>
+                {stock.forwardPE ? (<p>{stock.forwardPE}</p>) : null}
               </div>
             </div>
             <div className='flex justify-between py-4'>
               <div>
                 <p className='text-gray-500 text-sm'>24h High</p>
-                {stock.results[0].o ? (<p>${stock.results[0].o.toLocaleString()}</p>) : null}
+                {stock.regularMarketDayHigh ? (<p>${stock.regularMarketDayHigh.toLocaleString()}</p>) : null}
               </div>
               <div>
                   <p className='text-gray-500 text-sm'>24h Low</p>
-                  {stock.results[0].vw ? (<p>${stock.results[0].vw.toLocaleString()}</p>) : null}
+                  {stock.regularMarketDayLow ? (<p>${stock.regularMarketDayLow.toLocaleString()}</p>) : null}
               </div>
               </div>
             </div>
@@ -66,45 +73,45 @@ const StockPage = () => {
         <div>
           <p className='text-xl font-bold'>Market Stats</p>
           <div className='flex justify-between py-4'>
-            <div>
-              <p className='text-gray-500 text-sm'>Market Rank</p>
-              {stock.price}
+          <div>
+              <p className='text-gray-500 text-sm'>Dividend Yield</p>
+              {stock.dividendYield ? (<p>{stock.dividendYield.toFixed(2)}</p>) : null}
             </div>
             <div>
-              <p className='text-gray-500 text-sm'>Hashing Algorithm</p>
-              {stock.price ? <p>{stock.price}</p> : null}
+              <p className='text-gray-500 text-sm'>Dividend P/S</p>
+              {stock.dividendsPerShare ? (<p>{stock.dividendsPerShare}</p>) : null}
             </div>
             <div>
-              <p className='text-gray-500 text-sm'>Trust Score</p>
-              {stock.tickers ? <p>{stock.price.toFixed(2)}</p> : null}
+              <p className='text-gray-500 text-sm'>Dividend Rate</p>
+              {stock.dividendRate ? <p>{stock.dividendRate.toFixed(2)}</p> : null}
             </div>
           </div>
           <div className='flex justify-between py-4'>
+            <div>
+              <p className='text-gray-500 text-sm'>Revenue</p>
+              {stock.revenue}
+            </div>
             <div>
               <p className='text-gray-500 text-sm'>Price Change (24h)</p>
-              {stock.price ? (<p>{stock.price.toFixed(2)}%</p>) : null}
+              {stock.regularMarketChange ? (<p>{stock.regularMarketChange.toFixed(2)}%</p>) : null}
             </div>
             <div>
-              <p className='text-gray-500 text-sm'>Price Change (7d)</p>
-              {stock.price ? (<p>{stock.price.toFixed(2)}%</p>) : null}
-            </div>
-            <div>
-              <p className='text-gray-500 text-sm'>Price Change (14d)</p>
-              {stock.price ? (<p>{stock.price.toFixed(2)}%</p>) : null}
+              <p className='text-gray-500 text-sm'>Median Target Price</p>
+              {stock.targetPriceMedian ? <p>${stock.targetPriceMedian.toLocaleString()}</p> : null}
             </div>
           </div>
           <div className='flex justify-between py-4'>
             <div>
-              <p className='text-gray-500 text-sm'>Price Change (30d)</p>
-              {stock.price ? (<p>{stock.price.toFixed(2)}%</p>) : null}
+              <p className='text-gray-500 text-sm'>50 Day Average</p>
+              {stock.fiftyDayAverage ? (<p>${stock.fiftyDayAverage.toFixed(2)}</p>) : null}
             </div>
             <div>
-              <p className='text-gray-500 text-sm'>Price Change (60d)</p>
-              {stock.price ? (<p>{stock.price.toFixed(2)}%</p>) : null}
+              <p className='text-gray-500 text-sm'>52 Week High</p>
+              {stock.fiftyTwoWeekHigh ? (<p>${stock.fiftyTwoWeekHigh.toFixed(2)}</p>) : null}
             </div>
             <div>
-              <p className='text-gray-500 text-sm'>Price Change (1y)</p>
-              {stock.price ? (<p>{stock.price.toFixed(2)}%</p>) : null}
+              <p className='text-gray-500 text-sm'>52 Week Low</p>
+              {stock.fiftyTwoWeekLow ? (<p>${stock.fiftyTwoWeekLow.toFixed(2)}</p>) : null}
             </div>
           </div>
           <div className='flex justify-around p-8 text-accent'>
