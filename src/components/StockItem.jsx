@@ -7,6 +7,7 @@ import { db } from "../firebase";
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 
 const StockItem = ({stock}) => {
+
     const [savedStock, setSavedStock] = useState(false);
     const { user } = UserAuth();
 
@@ -17,9 +18,9 @@ const StockItem = ({stock}) => {
             setSavedStock(true);
             await updateDoc(stockPath, {
                 watchList: arrayUnion({
-                    id: stock.symbol,
-                    name: stock.name,
-                    exchange: stock.exchangeShortName,
+                    id: stock.ticker,
+                    name: stock.company_name,
+                    exchange: stock.exchange,
                     price: stock.price
                 })
             })
