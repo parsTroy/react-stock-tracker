@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 import { FaTwitter, FaFacebook, FaReddit, FaGithub } from 'react-icons/fa';
 import DOMPurify from 'dompurify';
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const StockPage = () => {
   const [stock, setStock] = useState({})
@@ -32,19 +32,19 @@ const StockPage = () => {
       <h1 className="text-4xl">{stock?.shortName}</h1>
       <div className='flex py-8'>
         <div>
-          <p className='text-3xl font-bold'>{stock?.symbol} Price</p>
+          <p className='text-3xl font-bold'>{stock?.symbol}</p>
           <p>({stock.symbol?.toUpperCase()}/ USD)</p>
         </div>
       </div>
 
         <div className='grid md:grid-cols-2 gap-8'>
-          <div>
+          <div className='rounded-div p-4'>
             <div className='flex justify-between'>
               {stock.regularMarketPrice ? (<p className='text-3xl font-bold'>${stock.regularMarketPrice}</p>) : null}
               <p>Regular Market Change</p>
             </div>
             {/* <div>
-              <Sparklines data={stock.market_data?.sparkline_7d.price}>
+              <Sparklines data={stock.quoteSummary.earnings.earningsChart?.currentQuarterEstimate}>
                 <SparklinesLine color="teal" />
               </Sparklines>
             </div> */}
@@ -70,7 +70,7 @@ const StockPage = () => {
               </div>
             </div>
 
-        <div>
+        <div className='rounded-div p-4'>
           <p className='text-xl font-bold'>Market Stats</p>
           <div className='flex justify-between py-4'>
           <div>
@@ -78,7 +78,7 @@ const StockPage = () => {
               {stock.dividendYield ? (<p>{stock.dividendYield.toFixed(2)}</p>) : null}
             </div>
             <div>
-              <p className='text-gray-500 text-sm'>Dividend P/S</p>
+              <p className='text-gray-500 text-sm'>Dividend Per Share</p>
               {stock.dividendsPerShare ? (<p>{stock.dividendsPerShare}</p>) : null}
             </div>
             <div>
@@ -96,7 +96,7 @@ const StockPage = () => {
               {stock.regularMarketChange ? (<p>{stock.regularMarketChange.toFixed(2)}%</p>) : null}
             </div>
             <div>
-              <p className='text-gray-500 text-sm'>Median Target Price</p>
+              <p className='text-gray-500 text-sm'>Median T/Price</p>
               {stock.targetPriceMedian ? <p>${stock.targetPriceMedian.toLocaleString()}</p> : null}
             </div>
           </div>
@@ -115,17 +115,17 @@ const StockPage = () => {
             </div>
           </div>
           <div className='flex justify-around p-8 text-accent'>
-            <FaTwitter />
-            <FaFacebook />
-            <FaReddit />
-            <FaGithub />
+              <FaTwitter />
+              <FaFacebook />
+              <FaReddit />
+              <FaGithub />
           </div>
         </div>
         </div>
 
       {/* Description */}
       <div className='py-4'>
-        <p className='text-xl font-bold'>About {stock.name}</p>
+        <p className='text-xl font-bold mt-4'>About {stock.name}</p>
         <p dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(stock.description ? stock.description.en : ''),}}></p>
       </div>
     </div>
