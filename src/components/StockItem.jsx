@@ -21,7 +21,9 @@ const StockItem = ({stock}) => {
                     id: stock.ticker,
                     name: stock.company_name,
                     exchange: stock.exchange,
-                    price: stock.price
+                    price: stock.price,
+                    dividend: stock.dividend_yield,
+                    sector: stock.sector
                 })
             })
         } else {
@@ -32,30 +34,27 @@ const StockItem = ({stock}) => {
   return (
     <tr className='h-[80px] border-b overflow-hidden'>
         <td onClick={saveStock}>{savedStock ? <AiFillStar />: <AiOutlineStar />}</td>
-        <td>{stock.exchange}</td>
+        <td>{stock.ticker}</td>
         <td>
-            <Link to={`/stock/${stock.id}`}>
+            <Link to={`/stock/${stock.ticker}`}>
                 <div className='flex items-center'>
-                    <p className='hidden sm:table-cell'>{stock.name}</p>
+                    <p className='hidden sm:table-cell'>{stock.company_name}</p>
                 </div>
             </Link>
         </td>
-        <td>{stock.symbol.toUpperCase()}</td>
         <td>${stock.price.toLocaleString()}</td>
+        <td></td>
         <td>
             {stock.price > 0 ? (
-                <p className='text-green-600'>{stock.price.toFixed(2)}%</p>
+                <p className='text-green-600'>{stock.change.toFixed(2)}</p>
             ) : (
-                <p className='text-red-600'>{stock.price.toFixed(2)}%</p>
+                <p className='text-red-600'>{stock.change.toFixed(2)}</p>
             )}
         </td>
-        {/* <td className='w-[180px] hidden md:table-cell'>${stock.total_volume.toLocaleString()}</td>
-        <td className='w-[180px] hidden sm:table-cell'>${stock.market_cap.toLocaleString()}</td>
-        <td>
-            <Sparklines data={stock.sparkline_in_7d.price}>
-                <SparklinesLine color='teal' />
-            </Sparklines>
-        </td> */}
+        <td className='w-[180px] hidden md:table-cell'>{stock.dividend_yield}</td>
+        <td className='w-[180px] hidden sm:table-cell'>{stock.sector}</td>
+        <td>{stock.exchange}</td>
+        <td className='w-[180px] hidden sm:table-cell'>{stock.roi}</td>
     </tr>
     );
 };

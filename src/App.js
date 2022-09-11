@@ -62,7 +62,7 @@ function App() {
       }
     }).then((response) => {
       // console.log(response.data);
-      setStocks(response.data);
+      setStocks(response.data.results);
     })
   }, [url])
 
