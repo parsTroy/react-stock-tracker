@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import StockItem from "./StockItem";
 
-const StockSearch = ({stocks}) => {
+const StockSearch = ({ stocks }) => {
     const [searchText, setSearchText] = useState('')
 
     return (
