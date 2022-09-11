@@ -45,7 +45,7 @@ const StockItem = ({stock}) => {
         <td>${stock.price.toLocaleString()}</td>
         <td></td>
         <td>
-            {stock.price > 0 ? (
+            {stock.change > 0 ? (
                 <p className='text-green-600'>{stock.change.toFixed(2)}</p>
             ) : (
                 <p className='text-red-600'>{stock.change.toFixed(2)}</p>
